@@ -40,9 +40,9 @@ jobs:
         cd daily_arxiv
         export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
         export OPENAI_BASE_URL=${{ secrets.OPENAI_BASE_URL }}
-        export LANGUAGE="${{ vars.LANGUAGE }}"
-        export CATEGORIES="${{ vars.CATEGORIES }}"
-        export MODEL_NAME="${{ vars.MODEL_NAME }}"
+        export LANGUAGE="${{ vars.LANGUAGE || 'Chinese' }}"
+        export CATEGORIES="${{ vars.CATEGORIES || 'cs.CV, cs.AI, cs.CL' }}"
+        export MODEL_NAME="${{ vars.MODEL_NAME || 'deepseek-chat' }}"
         
         # 使用Scrapy爬取
         # Use Scrapy to crawl
@@ -106,8 +106,8 @@ jobs:
         cd ai
         export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
         export OPENAI_BASE_URL=${{ secrets.OPENAI_BASE_URL }}
-        export LANGUAGE="${{ vars.LANGUAGE }}"
-        export MODEL_NAME="${{ vars.MODEL_NAME }}"
+        export LANGUAGE="${{ vars.LANGUAGE || 'Chinese' }}"
+        export MODEL_NAME="${{ vars.MODEL_NAME || 'deepseek-chat' }}"
         
         python enhance.py --data ../data/${today}.jsonl
         
@@ -126,7 +126,7 @@ jobs:
         echo "转换为Markdown格式... / Converting to Markdown format..."
         
         # 设置环境变量 / Set environment variables
-        export LANGUAGE="${{ vars.LANGUAGE }}"
+        export LANGUAGE="${{ vars.LANGUAGE || 'Chinese' }}"
         
         cd to_md
         
@@ -214,8 +214,8 @@ jobs:
     - name: Commit changes
       if: steps.dedup_check.outputs.has_new_content == 'true'
       run: |
-        git config --global user.email "${{ vars.EMAIL }}"
-        git config --global user.name "${{ vars.NAME }}"
+        git config --global user.email "${{ vars.EMAIL || 'youhuang0607@gmail.com' }}"
+        git config --global user.name "${{ vars.NAME || 'YouHuang' }}"
         git add .
         # 检查是否有变更需要提交 / Check if there are changes to commit
         if git diff --staged --quiet; then
